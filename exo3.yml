@@ -6,7 +6,7 @@ info:
 servers:
   - url: 'http://localhost:8000'
 paths:
-  /{tasks}:
+  /tasks:
     get:
       responses:
         '200':
@@ -45,7 +45,8 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/Task'
+                type: integer
+                example: 1
       responses:
         '200':
           description: Liste de tache supprimée
@@ -57,7 +58,7 @@ paths:
                   $ref: '#/components/schemas/Task'
 
 
-  /{tasks/id}:
+  /tasks/{id}:
     get:
       parameters:
         - name: id
@@ -92,13 +93,13 @@ paths:
             type: integer
       responses:
         '200':
-          description: Task deleted
+          description: Tâche supprimée
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Task'
         '404':
-          description: Task not found
+          description: Tâche non trouvée
           content:
             application/json:
               schema:

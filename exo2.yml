@@ -5,7 +5,7 @@ info:
 servers:
   - url: 'http://localhost:8000'
 paths:
-  /{users}:
+  /users:
     get:
       description: Retourne une liste d'utilisateurs.
       parameters:

@@ -5,7 +5,7 @@ info:
 servers:
   - url: 'http://localhost:8000'
 paths:
-  /{ping}:
+  /ping:
     get:
       description: Retourne une chaine de caractère
       responses:
