@@ -1,0 +1,69 @@
+openapi: 3.0.1
+info:
+  title: Product API
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8000'
+paths:
+  /products:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/q'
+      responses:
+        '200':
+          description: Liste de produits
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+              examples:
+                plusieursProduits:
+                  summary: Résultat avec plusieurs produits
+                  value:
+                    - name: "Lait en poudre"
+                      expiration_datetime: "2025-12-31T23:59:59Z"
+                      price: 4.50
+                    - name: "Chocolat noir"
+                      expiration_datetime: "2025-10-15T23:59:59Z"
+                      price: 2.99
+                aucunProduit:
+                  summary: Résultat vide
+                  value: []
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Gouty sablé"
+        expiration_datetime:
+          type: string
+          format: date-time
+          example: "2025-09-30T23:59:59Z"
+        price:
+          type: number
+          format: float
+          example: 1200.00
+
+  parameters:
+    limit:
+      name: limit
+      in: query
+      description: Nombre maximum d'éléments
+      required: false
+      schema:
+        type: integer
+        example: 10
+    q:
+      name: q
+      in: query
+      description: terme de recherche
+      required: false
+      schema:
+        type: string
+        example: "Chocolat"
