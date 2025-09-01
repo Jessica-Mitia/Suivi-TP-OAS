@@ -1,0 +1,148 @@
+openapi: 3.0.1
+info:
+  title: Product & Order API
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8000'
+
+paths:
+  /products:
+    get:
+      tags:
+        - Products
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/q'
+      responses:
+        '200':
+          description: Liste de produits
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+
+  /orders:
+    get:
+      tags:
+        - Orders
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+      responses:
+        '200':
+          description: Liste paginée des commandes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+              examples:
+                plusieursCommandes:
+                  summary: Exemple avec plusieurs commandes
+                  value:
+                    - identifier: 1
+                      customer_name: "Princia"
+                      creation_datetime: "2025-09-01T08:30:00Z"
+                      total_amount: 150.75
+                    - identifier: 2
+                      customer_name: "Fitia"
+                      creation_datetime: "2025-09-01T09:45:00Z"
+                      total_amount: 90.00
+                aucuneCommande:
+                  summary: Exemple vide
+                  value: []
+
+    post:
+      tags:
+        - Orders
+      security:
+        - basicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+            examples:
+              creationCommande:
+                summary: Exemple de création de commande
+                value:
+                  customer_name: "Charlie"
+                  creation_datetime: "2025-09-01T12:00:00Z"
+                  total_amount: 200.00
+      responses:
+        '201':
+          description: Commande créée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+              example:
+                identifier: 3
+                customer_name: "Charlie"
+                creation_datetime: "2025-09-01T12:00:00Z"
+                total_amount: 200.00
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+        expiration_datetime:
+          type: string
+          format: date-time
+        price:
+          type: number
+          format: float
+
+    Order:
+      type: object
+      properties:
+        identifier:
+          type: integer
+        customer_name:
+          type: string
+        creation_datetime:
+          type: string
+          format: date-time
+        total_amount:
+          type: number
+          format: float
+
+  parameters:
+    limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+      required: false
+    q:
+      name: q
+      in: query
+      schema:
+        type: string
+      required: false
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        example: 1
+      required: false
+    size:
+      name: size
+      in: query
+      schema:
+        type: integer
+        example: 10
+      required: false
+
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
